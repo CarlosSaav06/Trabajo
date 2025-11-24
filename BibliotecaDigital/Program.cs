@@ -150,3 +150,49 @@ namespace BibliotecaBusqueda
             }
             return autores;
         }
+        static int BusquedaBinariaAutores(List<string> autoresOrdenados, string autorBuscado)
+        {
+            string target = autorBuscado.Trim().ToLower();
+            int lo = 0;
+            int hi = autoresOrdenados.Count - 1;
+
+            while (lo <= hi)
+            {
+                int mid = (lo + hi) / 2;
+                string midVal = autoresOrdenados[mid].ToLower();
+                int cmp = String.Compare(midVal, target);
+                if (cmp == 0) return mid;
+                else if (cmp < 0) lo = mid + 1;
+                else hi = mid - 1;
+            }
+            return -1;
+        }
+
+        // Encuentra libro más antiguo y más reciente
+        static (Book antiguo, Book reciente) MasRecienteYMasAntiguo(List<Book> libros)
+        {
+            if (libros.Count == 0) return (null, null);
+            Book antiguo = libros[0];
+            Book reciente = libros[0];
+            for (int i = 1; i < libros.Count; i++)
+            {
+                if (libros[i].Anio < antiguo.Anio) antiguo = libros[i];
+                if (libros[i].Anio > reciente.Anio) reciente = libros[i];
+            }
+            return (antiguo, reciente);
+        }
+
+        // Búsqueda de coincidencias en descripción (coincidencia parcial, case-insensitive)
+        static List<Book> BusquedaCoincidenciasEnDescripcion(List<Book> libros, string texto)
+        {
+            List<Book> encontrados = new List<Book>();
+            string t = texto.ToLower();
+            for (int i = 0; i < libros.Count; i++)
+            {
+                if (libros[i].Descripcion.ToLower().Contains(t))
+                    encontrados.Add(libros[i]);
+            }
+            return encontrados;
+        }
+    }
+}
