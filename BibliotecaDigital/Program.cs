@@ -114,3 +114,39 @@ namespace BibliotecaBusqueda
                 new Book("Introducción a la IA", "Sofia Ruiz", 2021, "BP-005", "Conceptos básicos de inteligencia artificial y aprendizaje automático.")
             };
         }
+
+        // Búsqueda lineal por título (coincidencia parcial, case-insensitive)
+        static int BusquedaLinealPorTitulo(List<Book> libros, string titulo)
+        {
+            string t = titulo.ToLower();
+            for (int i = 0; i < libros.Count; i++)
+            {
+                if (libros[i].Titulo.ToLower().Contains(t))
+                    return i;
+            }
+            return -1;
+        }
+
+        // Extrae autores únicos y los ordena (ordenamiento simple) para búsqueda binaria
+        static List<string> ExtraerAutoresYOrdenar(List<Book> libros)
+        {
+            List<string> autores = new List<string>();
+            for (int i = 0; i < libros.Count; i++)
+            {
+                string a = libros[i].Autor;
+                if (!autores.Contains(a)) autores.Add(a);
+            }
+            // Ordenamiento por nombre (insertion sort simple)
+            for (int i = 1; i < autores.Count; i++)
+            {
+                string key = autores[i];
+                int j = i - 1;
+                while (j >= 0 && String.Compare(autores[j], key) > 0)
+                {
+                    autores[j + 1] = autores[j];
+                    j--;
+                }
+                autores[j + 1] = key;
+            }
+            return autores;
+        }
